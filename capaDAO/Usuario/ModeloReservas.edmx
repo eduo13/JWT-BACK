@@ -1,0 +1,700 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="BDReservasModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="estados">
+          <Key>
+            <PropertyRef Name="id_estado" />
+          </Key>
+          <Property Name="tipo" Type="nchar" MaxLength="25" Nullable="false" />
+          <Property Name="id_estado" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="horarios">
+          <Key>
+            <PropertyRef Name="id_horario" />
+          </Key>
+          <Property Name="id_horario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="nchar" MaxLength="25" Nullable="false" />
+          <Property Name="horario" Type="nchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="instalaciones">
+          <Key>
+            <PropertyRef Name="id_instalacion" />
+          </Key>
+          <Property Name="nombre" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="direccion" Type="nchar" MaxLength="100" Nullable="false" />
+          <Property Name="operativa" Type="bit" Nullable="false" />
+          <Property Name="id_horario" Type="int" Nullable="false" />
+          <Property Name="id_instalacion" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="imagen" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="perfiles">
+          <Key>
+            <PropertyRef Name="id_perfil" />
+          </Key>
+          <Property Name="id_perfil" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="perfil" Type="nchar" MaxLength="25" Nullable="false" />
+        </EntityType>
+        <EntityType Name="pistas">
+          <Key>
+            <PropertyRef Name="id_pista" />
+          </Key>
+          <Property Name="nombre" Type="nchar" MaxLength="25" Nullable="false" />
+          <Property Name="id_tipo_pista" Type="int" Nullable="false" />
+          <Property Name="id_instalacion" Type="int" Nullable="false" />
+          <Property Name="operativa" Type="bit" />
+          <Property Name="id_pista" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="reservas">
+          <Key>
+            <PropertyRef Name="id_reserva" />
+          </Key>
+          <Property Name="fecha" Type="date" Nullable="false" />
+          <Property Name="h_ini" Type="time" Precision="7" Nullable="false" />
+          <Property Name="h_fin" Type="time" Precision="7" Nullable="false" />
+          <Property Name="id_pista" Type="int" Nullable="false" />
+          <Property Name="id_usuario" Type="int" Nullable="false" />
+          <Property Name="created_at" Type="datetime" Nullable="false" />
+          <Property Name="updated_at" Type="datetime" Nullable="false" />
+          <Property Name="id_estado" Type="int" Nullable="false" />
+          <Property Name="id_reserva" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="tarifas">
+          <Key>
+            <PropertyRef Name="id_tarifa" />
+          </Key>
+          <Property Name="tarifa" Type="nchar" MaxLength="25" Nullable="false" />
+          <Property Name="valor" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="id_tarifa" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tipo_pista">
+          <Key>
+            <PropertyRef Name="id_tipo_pista" />
+          </Key>
+          <Property Name="nombre" Type="nchar" MaxLength="25" Nullable="false" />
+          <Property Name="id_tarifa" Type="int" Nullable="false" />
+          <Property Name="id_tipo_pista" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityType Name="usuarios">
+          <Key>
+            <PropertyRef Name="id_usuario" />
+          </Key>
+          <Property Name="id_usuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="apellido1" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="apellido2" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="dni" Type="nchar" MaxLength="9" Nullable="false" />
+          <Property Name="email" Type="nchar" MaxLength="100" Nullable="false" />
+          <Property Name="password" Type="varbinary(max)" Nullable="false" />
+          <Property Name="id_perfil" Type="int" />
+          <Property Name="imagen" Type="varbinary(max)" />
+        </EntityType>
+        <Association Name="FK_instalaciones_horarios">
+          <End Role="horarios" Type="Self.horarios" Multiplicity="1" />
+          <End Role="instalaciones" Type="Self.instalaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="horarios">
+              <PropertyRef Name="id_horario" />
+            </Principal>
+            <Dependent Role="instalaciones">
+              <PropertyRef Name="id_horario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_pistas_instalaciones">
+          <End Role="instalaciones" Type="Self.instalaciones" Multiplicity="1" />
+          <End Role="pistas" Type="Self.pistas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instalaciones">
+              <PropertyRef Name="id_instalacion" />
+            </Principal>
+            <Dependent Role="pistas">
+              <PropertyRef Name="id_instalacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_pistas_tipo_pista">
+          <End Role="tipo_pista" Type="Self.tipo_pista" Multiplicity="1" />
+          <End Role="pistas" Type="Self.pistas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipo_pista">
+              <PropertyRef Name="id_tipo_pista" />
+            </Principal>
+            <Dependent Role="pistas">
+              <PropertyRef Name="id_tipo_pista" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_reservas_estados">
+          <End Role="estados" Type="Self.estados" Multiplicity="1" />
+          <End Role="reservas" Type="Self.reservas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="estados">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="reservas">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_reservas_pistas">
+          <End Role="pistas" Type="Self.pistas" Multiplicity="1" />
+          <End Role="reservas" Type="Self.reservas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pistas">
+              <PropertyRef Name="id_pista" />
+            </Principal>
+            <Dependent Role="reservas">
+              <PropertyRef Name="id_pista" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_reservas_usuarios">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="reservas" Type="Self.reservas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="reservas">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tipo_pista_tarifas">
+          <End Role="tarifas" Type="Self.tarifas" Multiplicity="1" />
+          <End Role="tipo_pista" Type="Self.tipo_pista" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tarifas">
+              <PropertyRef Name="id_tarifa" />
+            </Principal>
+            <Dependent Role="tipo_pista">
+              <PropertyRef Name="id_tarifa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_usuarios_perfiles">
+          <End Role="perfiles" Type="Self.perfiles" Multiplicity="0..1" />
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="perfiles">
+              <PropertyRef Name="id_perfil" />
+            </Principal>
+            <Dependent Role="usuarios">
+              <PropertyRef Name="id_perfil" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="PA_DELETE_USUARIO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="int" Mode="In" />
+          <Parameter Name="RETCODE" Type="int" Mode="InOut" />
+          <Parameter Name="MENSAJE" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="PA_INSERT_PERFIL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="perfil" Type="nchar" Mode="In" />
+          <Parameter Name="RETCODE" Type="int" Mode="InOut" />
+          <Parameter Name="MENSAJE" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="PA_INSERT_USUARIO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="nombre" Type="nchar" Mode="In" />
+          <Parameter Name="apellido1" Type="nchar" Mode="In" />
+          <Parameter Name="apellido2" Type="nchar" Mode="In" />
+          <Parameter Name="dni" Type="nchar" Mode="In" />
+          <Parameter Name="email" Type="nchar" Mode="In" />
+          <Parameter Name="password" Type="nchar" Mode="In" />
+          <Parameter Name="id_perfil" Type="int" Mode="In" />
+          <Parameter Name="imagen" Type="varbinary(max)" Mode="In" />
+          <Parameter Name="RETCODE" Type="int" Mode="InOut" />
+          <Parameter Name="MENSAJE" Type="varchar" Mode="InOut" />
+        </Function>
+        <Function Name="PA_LOGIN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="email" Type="varchar" Mode="In" />
+          <Parameter Name="password" Type="nchar" Mode="In" />
+          <Parameter Name="ID" Type="int" Mode="InOut" />
+          <Parameter Name="RETCODE" Type="int" Mode="InOut" />
+          <Parameter Name="MENSAJE" Type="nchar" Mode="InOut" />
+        </Function>
+        <EntityContainer Name="BDReservasModelStoreContainer">
+          <EntitySet Name="estados" EntityType="Self.estados" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="horarios" EntityType="Self.horarios" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="instalaciones" EntityType="Self.instalaciones" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="perfiles" EntityType="Self.perfiles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="pistas" EntityType="Self.pistas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="reservas" EntityType="Self.reservas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tarifas" EntityType="Self.tarifas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="tipo_pista" EntityType="Self.tipo_pista" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="usuarios" EntityType="Self.usuarios" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_instalaciones_horarios" Association="Self.FK_instalaciones_horarios">
+            <End Role="horarios" EntitySet="horarios" />
+            <End Role="instalaciones" EntitySet="instalaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_pistas_instalaciones" Association="Self.FK_pistas_instalaciones">
+            <End Role="instalaciones" EntitySet="instalaciones" />
+            <End Role="pistas" EntitySet="pistas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_pistas_tipo_pista" Association="Self.FK_pistas_tipo_pista">
+            <End Role="tipo_pista" EntitySet="tipo_pista" />
+            <End Role="pistas" EntitySet="pistas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_reservas_estados" Association="Self.FK_reservas_estados">
+            <End Role="estados" EntitySet="estados" />
+            <End Role="reservas" EntitySet="reservas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_reservas_pistas" Association="Self.FK_reservas_pistas">
+            <End Role="pistas" EntitySet="pistas" />
+            <End Role="reservas" EntitySet="reservas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_reservas_usuarios" Association="Self.FK_reservas_usuarios">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="reservas" EntitySet="reservas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tipo_pista_tarifas" Association="Self.FK_tipo_pista_tarifas">
+            <End Role="tarifas" EntitySet="tarifas" />
+            <End Role="tipo_pista" EntitySet="tipo_pista" />
+          </AssociationSet>
+          <AssociationSet Name="FK_usuarios_perfiles" Association="Self.FK_usuarios_perfiles">
+            <End Role="perfiles" EntitySet="perfiles" />
+            <End Role="usuarios" EntitySet="usuarios" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BDReservasModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="estados">
+          <Key>
+            <PropertyRef Name="id_estado" />
+          </Key>
+          <Property Name="tipo" Type="String" MaxLength="25" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="id_estado" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="reservas" Relationship="Self.FK_reservas_estados" FromRole="estados" ToRole="reservas" />
+        </EntityType>
+        <EntityType Name="horarios">
+          <Key>
+            <PropertyRef Name="id_horario" />
+          </Key>
+          <Property Name="id_horario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="25" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="horario" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="instalaciones" Relationship="Self.FK_instalaciones_horarios" FromRole="horarios" ToRole="instalaciones" />
+        </EntityType>
+        <EntityType Name="instalaciones">
+          <Key>
+            <PropertyRef Name="id_instalacion" />
+          </Key>
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="direccion" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="operativa" Type="Boolean" Nullable="false" />
+          <Property Name="id_horario" Type="Int32" Nullable="false" />
+          <Property Name="id_instalacion" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="horarios" Relationship="Self.FK_instalaciones_horarios" FromRole="instalaciones" ToRole="horarios" />
+          <NavigationProperty Name="pistas" Relationship="Self.FK_pistas_instalaciones" FromRole="instalaciones" ToRole="pistas" />
+          <Property Name="imagen" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="perfiles">
+          <Key>
+            <PropertyRef Name="id_perfil" />
+          </Key>
+          <Property Name="id_perfil" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="perfil" Type="String" MaxLength="25" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="usuarios" Relationship="Self.FK_usuarios_perfiles" FromRole="perfiles" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="pistas">
+          <Key>
+            <PropertyRef Name="id_pista" />
+          </Key>
+          <Property Name="nombre" Type="String" MaxLength="25" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="id_tipo_pista" Type="Int32" Nullable="false" />
+          <Property Name="id_instalacion" Type="Int32" Nullable="false" />
+          <Property Name="operativa" Type="Boolean" />
+          <Property Name="id_pista" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="instalaciones" Relationship="Self.FK_pistas_instalaciones" FromRole="pistas" ToRole="instalaciones" />
+          <NavigationProperty Name="tipo_pista" Relationship="Self.FK_pistas_tipo_pista" FromRole="pistas" ToRole="tipo_pista" />
+          <NavigationProperty Name="reservas" Relationship="Self.FK_reservas_pistas" FromRole="pistas" ToRole="reservas" />
+        </EntityType>
+        <EntityType Name="reservas">
+          <Key>
+            <PropertyRef Name="id_reserva" />
+          </Key>
+          <Property Name="fecha" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="h_ini" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="h_fin" Type="Time" Nullable="false" Precision="7" />
+          <Property Name="id_pista" Type="Int32" Nullable="false" />
+          <Property Name="id_usuario" Type="Int32" Nullable="false" />
+          <Property Name="created_at" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="updated_at" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="id_estado" Type="Int32" Nullable="false" />
+          <Property Name="id_reserva" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="estados" Relationship="Self.FK_reservas_estados" FromRole="reservas" ToRole="estados" />
+          <NavigationProperty Name="pistas" Relationship="Self.FK_reservas_pistas" FromRole="reservas" ToRole="pistas" />
+          <NavigationProperty Name="usuarios" Relationship="Self.FK_reservas_usuarios" FromRole="reservas" ToRole="usuarios" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="tarifas">
+          <Key>
+            <PropertyRef Name="id_tarifa" />
+          </Key>
+          <Property Name="tarifa" Type="String" MaxLength="25" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="valor" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="id_tarifa" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="tipo_pista" Relationship="Self.FK_tipo_pista_tarifas" FromRole="tarifas" ToRole="tipo_pista" />
+        </EntityType>
+        <EntityType Name="tipo_pista">
+          <Key>
+            <PropertyRef Name="id_tipo_pista" />
+          </Key>
+          <Property Name="nombre" Type="String" MaxLength="25" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="id_tarifa" Type="Int32" Nullable="false" />
+          <Property Name="id_tipo_pista" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="pistas" Relationship="Self.FK_pistas_tipo_pista" FromRole="tipo_pista" ToRole="pistas" />
+          <NavigationProperty Name="tarifas" Relationship="Self.FK_tipo_pista_tarifas" FromRole="tipo_pista" ToRole="tarifas" />
+        </EntityType>
+        <EntityType Name="usuarios">
+          <Key>
+            <PropertyRef Name="id_usuario" />
+          </Key>
+          <Property Name="id_usuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="apellido1" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="apellido2" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="dni" Type="String" MaxLength="9" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="100" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
+          <Property Name="id_perfil" Type="Int32" />
+          <NavigationProperty Name="perfiles" Relationship="Self.FK_usuarios_perfiles" FromRole="usuarios" ToRole="perfiles" />
+          <NavigationProperty Name="reservas" Relationship="Self.FK_reservas_usuarios" FromRole="usuarios" ToRole="reservas" />
+          <Property Name="imagen" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <Association Name="FK_reservas_estados">
+          <End Role="estados" Type="Self.estados" Multiplicity="1" />
+          <End Role="reservas" Type="Self.reservas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="estados">
+              <PropertyRef Name="id_estado" />
+            </Principal>
+            <Dependent Role="reservas">
+              <PropertyRef Name="id_estado" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_instalaciones_horarios">
+          <End Role="horarios" Type="Self.horarios" Multiplicity="1" />
+          <End Role="instalaciones" Type="Self.instalaciones" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="horarios">
+              <PropertyRef Name="id_horario" />
+            </Principal>
+            <Dependent Role="instalaciones">
+              <PropertyRef Name="id_horario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_pistas_instalaciones">
+          <End Role="instalaciones" Type="Self.instalaciones" Multiplicity="1" />
+          <End Role="pistas" Type="Self.pistas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="instalaciones">
+              <PropertyRef Name="id_instalacion" />
+            </Principal>
+            <Dependent Role="pistas">
+              <PropertyRef Name="id_instalacion" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_usuarios_perfiles">
+          <End Role="perfiles" Type="Self.perfiles" Multiplicity="0..1" />
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="perfiles">
+              <PropertyRef Name="id_perfil" />
+            </Principal>
+            <Dependent Role="usuarios">
+              <PropertyRef Name="id_perfil" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_pistas_tipo_pista">
+          <End Role="tipo_pista" Type="Self.tipo_pista" Multiplicity="1" />
+          <End Role="pistas" Type="Self.pistas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipo_pista">
+              <PropertyRef Name="id_tipo_pista" />
+            </Principal>
+            <Dependent Role="pistas">
+              <PropertyRef Name="id_tipo_pista" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_reservas_pistas">
+          <End Role="pistas" Type="Self.pistas" Multiplicity="1" />
+          <End Role="reservas" Type="Self.reservas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="pistas">
+              <PropertyRef Name="id_pista" />
+            </Principal>
+            <Dependent Role="reservas">
+              <PropertyRef Name="id_pista" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_reservas_usuarios">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="reservas" Type="Self.reservas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id_usuario" />
+            </Principal>
+            <Dependent Role="reservas">
+              <PropertyRef Name="id_usuario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_tipo_pista_tarifas">
+          <End Role="tarifas" Type="Self.tarifas" Multiplicity="1" />
+          <End Role="tipo_pista" Type="Self.tipo_pista" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tarifas">
+              <PropertyRef Name="id_tarifa" />
+            </Principal>
+            <Dependent Role="tipo_pista">
+              <PropertyRef Name="id_tarifa" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BDReservasEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="estados" EntityType="Self.estados" />
+          <EntitySet Name="horarios" EntityType="Self.horarios" />
+          <EntitySet Name="instalaciones" EntityType="Self.instalaciones" />
+          <EntitySet Name="perfiles" EntityType="Self.perfiles" />
+          <EntitySet Name="pistas" EntityType="Self.pistas" />
+          <EntitySet Name="reservas" EntityType="Self.reservas" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="tarifas" EntityType="Self.tarifas" />
+          <EntitySet Name="tipo_pista" EntityType="Self.tipo_pista" />
+          <EntitySet Name="usuarios" EntityType="Self.usuarios" />
+          <AssociationSet Name="FK_reservas_estados" Association="Self.FK_reservas_estados">
+            <End Role="estados" EntitySet="estados" />
+            <End Role="reservas" EntitySet="reservas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_instalaciones_horarios" Association="Self.FK_instalaciones_horarios">
+            <End Role="horarios" EntitySet="horarios" />
+            <End Role="instalaciones" EntitySet="instalaciones" />
+          </AssociationSet>
+          <AssociationSet Name="FK_pistas_instalaciones" Association="Self.FK_pistas_instalaciones">
+            <End Role="instalaciones" EntitySet="instalaciones" />
+            <End Role="pistas" EntitySet="pistas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_usuarios_perfiles" Association="Self.FK_usuarios_perfiles">
+            <End Role="perfiles" EntitySet="perfiles" />
+            <End Role="usuarios" EntitySet="usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_pistas_tipo_pista" Association="Self.FK_pistas_tipo_pista">
+            <End Role="tipo_pista" EntitySet="tipo_pista" />
+            <End Role="pistas" EntitySet="pistas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_reservas_pistas" Association="Self.FK_reservas_pistas">
+            <End Role="pistas" EntitySet="pistas" />
+            <End Role="reservas" EntitySet="reservas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_reservas_usuarios" Association="Self.FK_reservas_usuarios">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="reservas" EntitySet="reservas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_tipo_pista_tarifas" Association="Self.FK_tipo_pista_tarifas">
+            <End Role="tarifas" EntitySet="tarifas" />
+            <End Role="tipo_pista" EntitySet="tipo_pista" />
+          </AssociationSet>
+          <FunctionImport Name="PA_DELETE_USUARIO">
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+            <Parameter Name="RETCODE" Mode="InOut" Type="Int32" />
+            <Parameter Name="MENSAJE" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PA_INSERT_PERFIL">
+            <Parameter Name="perfil" Mode="In" Type="String" />
+            <Parameter Name="RETCODE" Mode="InOut" Type="Int32" />
+            <Parameter Name="MENSAJE" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PA_INSERT_USUARIO">
+            <Parameter Name="nombre" Mode="In" Type="String" />
+            <Parameter Name="apellido1" Mode="In" Type="String" />
+            <Parameter Name="apellido2" Mode="In" Type="String" />
+            <Parameter Name="dni" Mode="In" Type="String" />
+            <Parameter Name="email" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+            <Parameter Name="id_perfil" Mode="In" Type="Int32" />
+            <Parameter Name="imagen" Mode="In" Type="Binary" />
+            <Parameter Name="RETCODE" Mode="InOut" Type="Int32" />
+            <Parameter Name="MENSAJE" Mode="InOut" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PA_LOGIN">
+            <Parameter Name="email" Mode="In" Type="String" />
+            <Parameter Name="password" Mode="In" Type="String" />
+            <Parameter Name="ID" Mode="InOut" Type="Int32" />
+            <Parameter Name="RETCODE" Mode="InOut" Type="Int32" />
+            <Parameter Name="MENSAJE" Mode="InOut" Type="String" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="BDReservasModelStoreContainer" CdmEntityContainer="BDReservasEntities">
+          <EntitySetMapping Name="estados">
+            <EntityTypeMapping TypeName="BDReservasModel.estados">
+              <MappingFragment StoreEntitySet="estados">
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+                <ScalarProperty Name="id_estado" ColumnName="id_estado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="horarios">
+            <EntityTypeMapping TypeName="BDReservasModel.horarios">
+              <MappingFragment StoreEntitySet="horarios">
+                <ScalarProperty Name="id_horario" ColumnName="id_horario" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="horario" ColumnName="horario" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="instalaciones">
+            <EntityTypeMapping TypeName="BDReservasModel.instalaciones">
+              <MappingFragment StoreEntitySet="instalaciones">
+                <ScalarProperty Name="imagen" ColumnName="imagen" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+                <ScalarProperty Name="operativa" ColumnName="operativa" />
+                <ScalarProperty Name="id_horario" ColumnName="id_horario" />
+                <ScalarProperty Name="id_instalacion" ColumnName="id_instalacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="perfiles">
+            <EntityTypeMapping TypeName="BDReservasModel.perfiles">
+              <MappingFragment StoreEntitySet="perfiles">
+                <ScalarProperty Name="id_perfil" ColumnName="id_perfil" />
+                <ScalarProperty Name="perfil" ColumnName="perfil" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="pistas">
+            <EntityTypeMapping TypeName="BDReservasModel.pistas">
+              <MappingFragment StoreEntitySet="pistas">
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="id_tipo_pista" ColumnName="id_tipo_pista" />
+                <ScalarProperty Name="id_instalacion" ColumnName="id_instalacion" />
+                <ScalarProperty Name="operativa" ColumnName="operativa" />
+                <ScalarProperty Name="id_pista" ColumnName="id_pista" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="reservas">
+            <EntityTypeMapping TypeName="BDReservasModel.reservas">
+              <MappingFragment StoreEntitySet="reservas">
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="h_ini" ColumnName="h_ini" />
+                <ScalarProperty Name="h_fin" ColumnName="h_fin" />
+                <ScalarProperty Name="id_pista" ColumnName="id_pista" />
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+                <ScalarProperty Name="id_estado" ColumnName="id_estado" />
+                <ScalarProperty Name="id_reserva" ColumnName="id_reserva" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="BDReservasModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tarifas">
+            <EntityTypeMapping TypeName="BDReservasModel.tarifas">
+              <MappingFragment StoreEntitySet="tarifas">
+                <ScalarProperty Name="tarifa" ColumnName="tarifa" />
+                <ScalarProperty Name="valor" ColumnName="valor" />
+                <ScalarProperty Name="id_tarifa" ColumnName="id_tarifa" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tipo_pista">
+            <EntityTypeMapping TypeName="BDReservasModel.tipo_pista">
+              <MappingFragment StoreEntitySet="tipo_pista">
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="id_tarifa" ColumnName="id_tarifa" />
+                <ScalarProperty Name="id_tipo_pista" ColumnName="id_tipo_pista" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="usuarios">
+            <EntityTypeMapping TypeName="BDReservasModel.usuarios">
+              <MappingFragment StoreEntitySet="usuarios">
+                <ScalarProperty Name="imagen" ColumnName="imagen" />
+                <ScalarProperty Name="id_usuario" ColumnName="id_usuario" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellido1" ColumnName="apellido1" />
+                <ScalarProperty Name="apellido2" ColumnName="apellido2" />
+                <ScalarProperty Name="dni" ColumnName="dni" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="id_perfil" ColumnName="id_perfil" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PA_DELETE_USUARIO" FunctionName="BDReservasModel.Store.PA_DELETE_USUARIO" />
+          <FunctionImportMapping FunctionImportName="PA_INSERT_PERFIL" FunctionName="BDReservasModel.Store.PA_INSERT_PERFIL" />
+          <FunctionImportMapping FunctionImportName="PA_INSERT_USUARIO" FunctionName="BDReservasModel.Store.PA_INSERT_USUARIO" />
+          <FunctionImportMapping FunctionImportName="PA_LOGIN" FunctionName="BDReservasModel.Store.PA_LOGIN" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
